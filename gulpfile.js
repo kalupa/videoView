@@ -2,6 +2,8 @@
 // generated on 2014-05-09 using generator-gulp-webapp 0.1.0
 
 var gulp = require('gulp');
+var mocha = require('gulp-mocha');
+var gutil = require('gulp-util');
 
 // load plugins
 var $ = require('gulp-load-plugins')();
@@ -88,11 +90,12 @@ gulp.task('connect', function () {
         .listen(9000)
         .on('listening', function () {
             console.log('Started connect web server on http://localhost:9000');
-        });
+        })
+        .on('error', gutil.log);
 });
 
 gulp.task('serve', ['connect', 'styles'], function () {
-    require('opn')('http://localhost:9000');
+    //require('opn')('http://localhost:9000');
 });
 
 // inject bower components
@@ -111,6 +114,18 @@ gulp.task('wiredep', function () {
             exclude: ['bootstrap-sass-official']
         }))
         .pipe(gulp.dest('app'));
+});
+
+gulp.task('mocha', function() {
+    return gulp.src(['test/spec/*.js'], { read: false })
+    .pipe(mocha({
+        reporter: 'spec'
+    }))
+    .on('error', gutil.log);
+});
+
+gulp.task('watch-mocha', function() {
+    gulp.watch(['app/scripts/**', 'lib/**', 'test/spec/**'], ['mocha']);
 });
 
 gulp.task('watch', ['connect', 'serve'], function () {
