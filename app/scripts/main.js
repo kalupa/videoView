@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 !(function(){
-    'use strict';
+   'use strict';
     React.renderComponent(
         <ChatApp />,
         $('#chatter')[0]
